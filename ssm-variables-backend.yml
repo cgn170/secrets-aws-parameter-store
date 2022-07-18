@@ -1,0 +1,41 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: Setup AWS SSM parameters with custom resource for backend service
+
+Parameters:
+  KmsKeyAlias:
+    Type: String
+
+  Environment:
+    Type: String
+
+Resources:
+  SECRETTOKEN:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      Name: !Sub "/backend/${Environment}/SECRET_TOKEN"
+      ServiceToken: !ImportValue ParamStoreHelper
+      Type: SecureString
+      Value: " "
+      KeyId: !ImportValue 
+              'Fn::Sub': "${KmsKeyAlias}"
+
+  SECRETUSER:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      Name: !Sub "/backend/${Environment}/SECRET_USER"
+      ServiceToken: !ImportValue ParamStoreHelper
+      Type: SecureString
+      Value: " "
+      KeyId: !ImportValue 
+              'Fn::Sub': "${KmsKeyAlias}"
+
+  SECRETPASSWORD:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      Name: !Sub "/backend/${Environment}/SECRET_PASSWORD"
+      ServiceToken: !ImportValue ParamStoreHelper
+      Type: SecureString
+      Value: " "
+      KeyId: !ImportValue 
+              'Fn::Sub': "${KmsKeyAlias}"
